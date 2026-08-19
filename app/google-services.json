@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "215102035656",
+    "project_id": "goldmineuncc",
+    "storage_bucket": "goldmineuncc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:215102035656:android:REPLACE_WITH_ANDROID_APP_SUFFIX",
+        "android_client_info": {
+          "package_name": "com.goldmine.uncc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "REPLACE_WITH_ANDROID_API_KEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:215102035656:android:REPLACE_WITH_DEBUG_APP_SUFFIX",
+        "android_client_info": {
+          "package_name": "com.goldmine.uncc.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "REPLACE_WITH_ANDROID_API_KEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

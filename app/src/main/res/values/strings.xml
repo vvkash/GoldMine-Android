@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GoldMine UNCC</string>
+    <string name="freebie_channel_name">Freebies</string>
+    <string name="freebie_channel_description">Alerts when free stuff is being given away on campus</string>
+</resources>

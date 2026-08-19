@@ -1,7 +1,6 @@
 <resources>
-    <color name="ic_launcher_background">#005035</color>
+    <color name="ic_launcher_background">#000000</color>
     <color name="charlotte_green">#005035</color>
-    <color name="niner_gold">#A49665</color>
     <color name="app_dark_background">#131517</color>
     <color name="app_light_background">#F2F2F2</color>
 </resources>

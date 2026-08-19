@@ -1,6 +1,7 @@
 package com.goldmine.uncc.data.firebase
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -18,17 +19,13 @@ import com.goldmine.uncc.R
 object NotificationHelper {
 
     const val FREEBIE_CHANNEL_ID = "freebies"
-    private const val FREEBIE_CHANNEL_NAME = "Freebies"
-    private const val FREEBIE_CHANNEL_DESCRIPTION =
-        "Alerts when free stuff is being given away on campus"
 
     fun ensureChannel(context: Context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val channel = NotificationChannel(
             FREEBIE_CHANNEL_ID,
-            FREEBIE_CHANNEL_NAME,
+            context.getString(R.string.freebie_channel_name),
             NotificationManager.IMPORTANCE_HIGH,
-        ).apply { description = FREEBIE_CHANNEL_DESCRIPTION }
+        ).apply { description = context.getString(R.string.freebie_channel_description) }
 
         context.getSystemService(NotificationManager::class.java)
             ?.createNotificationChannel(channel)
@@ -43,10 +40,12 @@ object NotificationHelper {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    // canPostNotifications() performs the POST_NOTIFICATIONS runtime check that lint cannot
+    // follow across the helper call.
+    @SuppressLint("MissingPermission")
     fun show(context: Context, id: String, title: String, body: String) {
         if (!canPostNotifications(context)) return
         ensureChannel(context)
-
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }

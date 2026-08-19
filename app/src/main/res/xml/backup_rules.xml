@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Backs up the user's profile, saved classes and home layout (all of which live in the
+  DataStore file) so a device upgrade keeps their schedule. The device id is restored too,
+  which is intentional: it keeps one `fcmTokens` document per install instead of orphaning
+  the old one, and the token itself is refreshed on the next launch.
+-->
 <full-backup-content>
+    <include
+        domain="file"
+        path="datastore" />
     <include
         domain="sharedpref"
         path="." />
-    <exclude
-        domain="file"
-        path="datastore/goldmine_prefs.preferences_pb" />
 </full-backup-content>

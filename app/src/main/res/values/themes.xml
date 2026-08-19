@@ -5,8 +5,4 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
-
-    <style name="Theme.GoldMine.Splash" parent="Theme.GoldMine">
-        <item name="android:windowBackground">@color/charlotte_green</item>
-    </style>
 </resources>

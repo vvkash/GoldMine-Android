@@ -9,22 +9,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.graphics.ColorUtils
 import com.goldmine.uncc.core.colorFromHex
 import com.goldmine.uncc.core.formatMinutesOfDay
 import com.goldmine.uncc.data.model.CampusBuildings
 import com.goldmine.uncc.data.model.ClassItem
 import com.goldmine.uncc.ui.components.GoldMineHeader
+import com.goldmine.uncc.ui.components.rememberMarkerStateAt
 import com.goldmine.uncc.ui.theme.LocalGoldMineColors
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import androidx.compose.ui.graphics.toArgb
-import androidx.core.graphics.ColorUtils
 
 /** Pins every scheduled class on the campus map — the iOS `ClassesMapView`. */
 @Composable
@@ -60,14 +61,16 @@ fun ClassesMapScreen(
                 uiSettings = MapUiSettings(zoomControlsEnabled = true, mapToolbarEnabled = false),
             ) {
                 located.forEach { (item, position) ->
-                    Marker(
-                        state = MarkerState(position = position),
-                        title = item.name,
-                        snippet = "${item.buildingName} ${item.roomNumber} · " +
-                            "${formatMinutesOfDay(item.startMinutes)}-" +
-                            formatMinutesOfDay(item.endMinutes),
-                        icon = BitmapDescriptorFactory.defaultMarker(hueOf(item.color)),
-                    )
+                    key(item.id) {
+                        Marker(
+                            state = rememberMarkerStateAt(position),
+                            title = item.name,
+                            snippet = "${item.buildingName} ${item.roomNumber} · " +
+                                "${formatMinutesOfDay(item.startMinutes)}-" +
+                                formatMinutesOfDay(item.endMinutes),
+                            icon = BitmapDescriptorFactory.defaultMarker(hueOf(item.color)),
+                        )
+                    }
                 }
             }
         }

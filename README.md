@@ -151,11 +151,32 @@ losing it means you cannot ship updates without a Play key reset.
 - [ ] `MAPS_API_KEY` restricted to the app's SHA-1 + package name in Google Cloud Console
 - [ ] Bump `versionCode` / `versionName` in `app/build.gradle.kts`
 - [ ] `./gradlew bundleRelease` → upload `app/build/outputs/bundle/release/app-release.aab`
+- [x] 512×512 store listing icon — `play-store/icon-512.png`
 - [ ] Data safety form: declare **approximate location** (freebie posting) and **device ID** (FCM token)
 - [ ] Link the privacy policy (mirrors `PrivacyPolicyScreen.kt`)
 - [ ] Content rating questionnaire
 - [ ] Target audience: 13+
 - [ ] Phone + 7" / 10" tablet screenshots
+
+### App icon
+
+The launcher icon is an [adaptive icon](https://developer.android.com/develop/ui/views/launch/icon_design_adaptive)
+generated from the iOS `AppIcon` artwork:
+
+| Layer | Source |
+| --- | --- |
+| background | `@color/ic_launcher_background` — `#000000`, matching the iOS icon backdrop |
+| foreground | `mipmap-*/ic_launcher_foreground.png` — the artwork cut out with an alpha channel, scaled to 61.5% of the 108dp canvas so it stays inside the safe zone under every launcher mask |
+| monochrome | `drawable/ic_launcher_monochrome.xml` — pickaxe glyph for Android 13+ themed icons |
+
+`minSdk` is 26, so there are no legacy square PNG launcher icons — every supported device
+uses the adaptive icon.
+
+### Quality gates
+
+`./gradlew :app:lintDebug` reports **0 fatal, 0 error**. The only remaining warnings are
+`GradleDependency` / `AndroidGradlePluginVersion` advisories about newer library versions
+being available.
 
 ---
 

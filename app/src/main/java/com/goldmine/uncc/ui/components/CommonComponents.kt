@@ -167,10 +167,10 @@ fun SocialButton(
 @Composable
 fun GoldMineHeader(
     title: String,
+    modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     backLabel: String? = "Back",
     trailing: @Composable (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier

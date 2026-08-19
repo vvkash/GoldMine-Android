@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import com.goldmine.uncc.data.model.CampusBuildings
 import com.goldmine.uncc.data.model.MapLocation
 import com.goldmine.uncc.ui.components.GoldMineHeader
+import com.goldmine.uncc.ui.components.rememberMarkerStateAt
 import com.goldmine.uncc.ui.theme.GoldMineColors
 import com.goldmine.uncc.ui.theme.LocalGoldMineColors
 import com.google.android.gms.maps.model.CameraPosition
@@ -55,12 +56,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Locale
 
 private val CAMPUS = LatLng(35.3071, -80.7352)
 
@@ -167,7 +167,7 @@ fun LocationPickerScreen(
                 onMapLongClick = { choose(it, null) },
             ) {
                 selected?.let { point ->
-                    Marker(state = MarkerState(position = point), title = locationName)
+                    Marker(state = rememberMarkerStateAt(point), title = locationName)
                 }
             }
 

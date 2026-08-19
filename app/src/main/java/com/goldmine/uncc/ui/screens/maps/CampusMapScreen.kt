@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -26,6 +27,7 @@ import androidx.core.content.ContextCompat
 import com.goldmine.uncc.data.model.CampusMapBuildings
 import com.goldmine.uncc.ui.components.GoldMineHeader
 import com.goldmine.uncc.ui.components.HeaderIconButton
+import com.goldmine.uncc.ui.components.rememberMarkerStateAt
 import com.goldmine.uncc.ui.theme.LocalGoldMineColors
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -33,7 +35,6 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
 /** Full campus map with every building pin — the iOS `CampusMapView`. */
@@ -100,13 +101,15 @@ fun CampusMapScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
                 uiSettings = MapUiSettings(zoomControlsEnabled = true, mapToolbarEnabled = false),
             ) {
                 CampusMapBuildings.all.forEach { (name, position) ->
-                    Marker(
-                        state = MarkerState(position = position),
-                        title = name,
-                        icon = BitmapDescriptorFactory.defaultMarker(
-                            BitmapDescriptorFactory.HUE_GREEN,
-                        ),
-                    )
+                    key(name) {
+                        Marker(
+                            state = rememberMarkerStateAt(position),
+                            title = name,
+                            icon = BitmapDescriptorFactory.defaultMarker(
+                                BitmapDescriptorFactory.HUE_GREEN,
+                            ),
+                        )
+                    }
                 }
             }
         }

@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.goldmine.uncc.data.model.FreebieEvent
+import com.goldmine.uncc.ui.components.rememberMarkerStateAt
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -16,7 +17,6 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
 /** Non-interactive preview map inside a feed card — the iOS `MiniMapView`. */
@@ -48,7 +48,7 @@ fun MiniFreebieMap(
                 mapToolbarEnabled = false,
             ),
         ) {
-            Marker(state = MarkerState(position = position), title = event.company)
+            Marker(state = rememberMarkerStateAt(position), title = event.company)
         }
 
         Box(

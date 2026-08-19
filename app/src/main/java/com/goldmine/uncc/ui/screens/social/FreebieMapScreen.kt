@@ -9,16 +9,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import com.goldmine.uncc.data.model.FreebieEvent
 import com.goldmine.uncc.ui.components.GoldMineHeader
+import com.goldmine.uncc.ui.components.rememberMarkerStateAt
 import com.goldmine.uncc.ui.theme.LocalGoldMineColors
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
 private val CAMPUS_CENTER = LatLng(35.3071, -80.7352)
@@ -27,9 +28,9 @@ private val CAMPUS_CENTER = LatLng(35.3071, -80.7352)
 @Composable
 fun FreebieMapScreen(
     events: List<FreebieEvent>,
-    title: String = "Freebie Map",
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    title: String = "Freebie Map",
 ) {
     val extras = LocalGoldMineColors.current
     val focus = events.firstOrNull()?.let { LatLng(it.location.latitude, it.location.longitude) }
@@ -53,13 +54,15 @@ fun FreebieMapScreen(
                 uiSettings = MapUiSettings(zoomControlsEnabled = true, mapToolbarEnabled = false),
             ) {
                 events.forEach { event ->
-                    Marker(
-                        state = MarkerState(
-                            position = LatLng(event.location.latitude, event.location.longitude),
-                        ),
-                        title = event.company,
-                        snippet = event.location.title,
-                    )
+                    key(event.id) {
+                        Marker(
+                            state = rememberMarkerStateAt(
+                                LatLng(event.location.latitude, event.location.longitude),
+                            ),
+                            title = event.company,
+                            snippet = event.location.title,
+                        )
+                    }
                 }
             }
         }

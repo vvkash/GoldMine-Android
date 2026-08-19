@@ -115,6 +115,20 @@ Both are injected at build time (`BuildConfig.OPENWEATHER_API_KEY` and the
 ./gradlew bundleRelease        # Play Store AAB
 ```
 
+### 5. Test
+
+```bash
+./gradlew testDebugUnitTest    # 34 JVM unit tests, no emulator needed
+./gradlew lintDebug            # 0 fatal, 0 error
+```
+
+| Suite | What it protects |
+| --- | --- |
+| `FreebieWireFormatTest` | The Firestore document shape shared with iOS — field set, Firestore `Timestamp` for `date`, `location` as a nested map rather than a `GeoPoint`, and uppercase UUIDs to match Swift's `uuidString`. Breaking any of these splits the live feed in two. |
+| `PersistenceRoundTripTest` | JSON round trips for `ClassItem` / `MapLocation` and hex colour parsing. A regression here silently wipes a user's saved schedule on upgrade. |
+| `GymOccupancyCalculatorTest` | UREC opening hours and the hour-by-hour occupancy curves ported from the iOS `GymOccupancyService`. |
+| `ClassScheduleTest` | Weekday mapping, `classesOn(date)` filtering, 12-hour time formatting and the campus building coordinate table. |
+
 ---
 
 ## Release signing
@@ -174,7 +188,8 @@ uses the adaptive icon.
 
 ### Quality gates
 
-`./gradlew :app:lintDebug` reports **0 fatal, 0 error**. The only remaining warnings are
+`./gradlew :app:lintDebug` reports **0 fatal, 0 error** and `./gradlew :app:testDebugUnitTest`
+runs **34 passing unit tests**. The only remaining lint warnings are
 `GradleDependency` / `AndroidGradlePluginVersion` advisories about newer library versions
 being available.
 

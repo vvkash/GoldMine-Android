@@ -111,9 +111,10 @@ val verifyPlayRelease = tasks.register("verifyPlayRelease") {
         }
         val store = secret("RELEASE_STORE_FILE")
         if (store.isNotBlank() && !rootProject.file(store).isFile) problems += "Upload keystore file does not exist"
-        val firebase = project.file("google-services.json")
+        val firebase = project.file("src/release/google-services.json").takeIf { it.isFile }
+            ?: project.file("google-services.json")
         if (!firebase.isFile) {
-            problems += "app/google-services.json is missing"
+            problems += "Firebase config is missing (expected app/src/release/google-services.json or app/google-services.json)"
         } else {
             runCatching {
                 val config = JsonSlurper().parse(firebase) as Map<*, *>

@@ -27,13 +27,37 @@ private data class PolicySection(val heading: String, val body: String)
 private val POLICY_SECTIONS = listOf(
     PolicySection(
         "Our Commitment to Privacy",
-        "Gold Mine UNCC is designed to provide UNC Charlotte students with easy access to " +
-            "university resources. We take your privacy seriously.",
+        "GoldMine UNCC is an independent student-built campus companion and is not affiliated " +
+            "with or endorsed by UNC Charlotte. This notice explains what data the app handles.",
     ),
     PolicySection(
-        "Data Collection",
-        "We do not collect, store, or track personal data. The app does not track users across " +
-            "apps and websites owned by other companies.",
+        "Information Stored on Your Device",
+        "Your display name, class schedule, appearance settings, home-screen layout, notification " +
+            "choices, and a random app-install identifier are stored locally. Class schedules and " +
+            "layout preferences are not uploaded to GoldMine's Firebase backend. Android backup " +
+            "and device transfer may copy this local data according to your device settings.",
+    ),
+    PolicySection(
+        "Community and Notification Data",
+        "GoldMine uses Google Firebase. Your display name can be stored with votes and, if push " +
+            "notifications are configured, with a Firebase messaging token, random install " +
+            "identifier, platform, and notification preference. Freebie reports include the " +
+            "submitted company, selected location name and coordinates, time, status, and votes. " +
+            "Reports are visible to other GoldMine users.",
+    ),
+    PolicySection(
+        "Location",
+        "Location permission is optional and is requested only when you choose My Location on the " +
+            "campus map. Google Maps may process device location to provide that feature. A " +
+            "freebie report uploads the campus location you select on the map; it does not require " +
+            "your live device location.",
+    ),
+    PolicySection(
+        "Analytics and Service Providers",
+        "Firebase Analytics may process app interactions, device or app identifiers, and " +
+            "diagnostic information. Google provides Firebase, Cloud Messaging, Firestore, and " +
+            "Maps services and processes data under its own terms. GoldMine does not sell personal " +
+            "information or use it for cross-app advertising.",
     ),
     PolicySection(
         "WebView and Cookies",
@@ -50,11 +74,11 @@ private val POLICY_SECTIONS = listOf(
             "tracking purposes.",
     ),
     PolicySection(
-        "Notifications & Community Reports",
-        "If you enable freebie notifications, your device's push token and the display name " +
-            "you chose are stored so alerts can be delivered. Freebie reports you submit are " +
-            "shared with other GoldMine users. You can turn notifications off at any time in " +
-            "Settings.",
+        "Your Choices and Contact",
+        "You can deny location or notification permission and turn freebie notifications off in " +
+            "Settings. To request deletion of community, notification, or install data, open an " +
+            "issue at github.com/vvkash/GoldMine-Android/issues. Include only the information " +
+            "needed to identify the data; do not post sensitive information publicly.",
     ),
 )
 

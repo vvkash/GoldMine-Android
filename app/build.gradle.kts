@@ -1,4 +1,5 @@
 import java.util.Properties
+import groovy.json.JsonSlurper
 
 plugins {
     alias(libs.plugins.android.application)
@@ -24,12 +25,16 @@ fun secret(key: String, fallback: String = ""): String =
 
 android {
     namespace = "com.goldmine.uncc"
-    compileSdk = 35
+    compileSdk {
+        version = release(36) {
+            minorApiLevel = 1
+        }
+    }
 
     defaultConfig {
         applicationId = "com.goldmine.uncc"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -90,9 +95,59 @@ android {
     }
 
     lint {
-        abortOnError = false
-        checkReleaseBuilds = false
+        abortOnError = true
+        checkReleaseBuilds = true
     }
+}
+
+val verifyPlayRelease = tasks.register("verifyPlayRelease") {
+    group = "verification"
+    description = "Checks production configuration without printing credentials."
+    doLast {
+        val problems = mutableListOf<String>()
+        listOf("MAPS_API_KEY", "OPENWEATHER_API_KEY", "RELEASE_STORE_FILE",
+            "RELEASE_STORE_PASSWORD", "RELEASE_KEY_ALIAS", "RELEASE_KEY_PASSWORD").forEach { key ->
+            if (secret(key).isBlank() || secret(key).contains("REPLACE_WITH")) problems += "$key is missing or a placeholder"
+        }
+        val store = secret("RELEASE_STORE_FILE")
+        if (store.isNotBlank() && !rootProject.file(store).isFile) problems += "Upload keystore file does not exist"
+        val firebase = project.file("src/release/google-services.json").takeIf { it.isFile }
+            ?: project.file("google-services.json")
+        if (!firebase.isFile) {
+            problems += "Firebase config is missing (expected app/src/release/google-services.json or app/google-services.json)"
+        } else {
+            runCatching {
+                val config = JsonSlurper().parse(firebase) as Map<*, *>
+                val clients = config["client"] as List<*>
+                val production = clients.filterIsInstance<Map<*, *>>().firstOrNull { client ->
+                    val info = client["client_info"] as? Map<*, *>
+                    val androidInfo = info?.get("android_client_info") as? Map<*, *>
+                    androidInfo?.get("package_name") == "com.goldmine.uncc"
+                }
+                check(production != null)
+                val info = production["client_info"] as Map<*, *>
+                val appId = info["mobilesdk_app_id"] as? String ?: ""
+                val keys = production["api_key"] as? List<*> ?: emptyList<Any>()
+                check(appId.isNotBlank() && !appId.contains("REPLACE_WITH"))
+                check(keys.filterIsInstance<Map<*, *>>().any {
+                    val key = it["current_key"] as? String ?: ""
+                    key.isNotBlank() && !key.contains("REPLACE_WITH")
+                })
+            }.onFailure { problems += "Firebase configuration needs a real com.goldmine.uncc client" }
+        }
+        check(problems.isEmpty()) { "Play release blocked:\n" + problems.joinToString("\n") }
+        logger.lifecycle("Production configuration is present. Credentials and live services still require device testing.")
+    }
+}
+
+tasks.register("preparePlayRelease") {
+    group = "build"
+    description = "Validates production settings, runs checks, and builds the signed Play bundle."
+    dependsOn(verifyPlayRelease, "testDebugUnitTest", "lintRelease", "bundleRelease")
+}
+
+tasks.matching { it.name == "preReleaseBuild" }.configureEach {
+    mustRunAfter(verifyPlayRelease)
 }
 
 dependencies {

@@ -73,9 +73,9 @@ Enforced by `data/model/FreebieEvent.kt` (`toMap()` / `fromSnapshot()`).
 
 ### 1. Prerequisites
 
-* Android Studio Ladybug or newer
+* Android Studio Narwhal 3 Feature Drop or newer
 * JDK 17+ (Android Studio's bundled JBR works)
-* Android SDK Platform 35
+* Android SDK Platform 36.1
 
 ### 2. Register the Android app in Firebase
 
@@ -112,7 +112,8 @@ Both are injected at build time (`BuildConfig.OPENWEATHER_API_KEY` and the
 
 ```bash
 ./gradlew assembleDebug        # debug APK
-./gradlew bundleRelease        # Play Store AAB
+./gradlew bundleRelease        # Build-only AAB (may be unsigned/unconfigured)
+./gradlew :app:preparePlayRelease # Validate configuration + tests/lint + signed AAB
 ```
 
 ### 5. Test
@@ -161,15 +162,19 @@ losing it means you cannot ship updates without a Play key reset.
 
 ## Play Store checklist
 
+See [release status and remaining inputs](play-store/RELEASE_STATUS.md). A successful
+`bundleRelease` alone does not establish production readiness.
+
 - [ ] Real `google-services.json` in `app/`
 - [ ] `MAPS_API_KEY` restricted to the app's SHA-1 + package name in Google Cloud Console
 - [ ] Bump `versionCode` / `versionName` in `app/build.gradle.kts`
 - [ ] `./gradlew bundleRelease` → upload `app/build/outputs/bundle/release/app-release.aab`
 - [x] 512×512 store listing icon — `play-store/icon-512.png`
-- [ ] Data safety form: declare **approximate location** (freebie posting) and **device ID** (FCM token)
-- [ ] Link the privacy policy (mirrors `PrivacyPolicyScreen.kt`)
+- [x] 1024×500 feature graphic — `play-store/feature-graphic-1024x500.png`
+- [ ] Review `play-store/DATA_SAFETY.md` against the production Firebase configuration, then submit the Data safety form
+- [ ] Enable GitHub Pages for `/docs` and link `docs/privacy-policy.html`
 - [ ] Content rating questionnaire
-- [ ] Target audience: 13+
+- [ ] Select the actual intended target audience in Play Console
 - [ ] Phone + 7" / 10" tablet screenshots
 
 ### App icon
@@ -224,4 +229,5 @@ com.goldmine.uncc
 ## Minimum requirements
 
 * **minSdk 26** (Android 8.0) — covers ~98% of active devices
-* **targetSdk / compileSdk 35** (Android 15)
+* **targetSdk 36** (Android 16)
+* **compileSdk 36.1** (Android 16 QPR2)

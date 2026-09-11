@@ -1,5 +1,8 @@
 *.iml
 .gradle
+.kotlin
+/app/src/release/google-services.json
+/app/src/debug/google-services.json
 /local.properties
 /.idea
 .DS_Store
